@@ -1,72 +1,11 @@
 const calculateLevenshteinDistance = require('../helpers/strings');
-
-const images = [
-	{
-		id: 1,
-		url: 'http://localhost:3000/images/close-up-portrait-yorkshire-dogs.jpg',
-		alt: 'Close-up portrait of Yorkshire dogs',
-		searchTerms: [
-			'close-up',
-			'portrait',
-			'Yorkshire',
-			'dogs',
-			'animals',
-			'pets',
-			'cute',
-			'adorable',
-		],
-	},
-	{
-		id: 2,
-		url: 'http://localhost:3000/images/closeup-vertical-shot-cute-european-shorthair-cat.jpg',
-		alt: 'Close-up vertical shot of a cute European Shorthair cat',
-		searchTerms: [
-			'close-up',
-			'vertical',
-			'shot',
-			'cute',
-			'European',
-			'Shorthair',
-			'cat',
-			'animals',
-			'pets',
-		],
-	},
-	{
-		id: 3,
-		url: 'http://localhost:3000/images/cute-cats-relaxing-indoors.jpg',
-		alt: 'Cute cats relaxing indoors',
-		searchTerms: ['cute', 'cats', 'relaxing', 'indoors', 'animals', 'pets'],
-	},
-	{
-		id: 4,
-		url: 'http://localhost:3000/images/cute-cats.jpg',
-		alt: 'Cute cats',
-		searchTerms: ['cute', 'cats', 'animals', 'pets'],
-	},
-	{
-		id: 5,
-		url: 'http://localhost:3000/images/cute-dogs-standing.jpg',
-		alt: 'Cute dogs standing',
-		searchTerms: ['cute', 'dogs', 'standing', 'animals', 'pets'],
-	},
-	{
-		id: 6,
-		url: 'http://localhost:3000/images/dogs-2.jpg',
-		alt: 'Cute dogs',
-		searchTerms: ['cute', 'dogs', 'animals', 'pets'],
-	},
-	{
-		id: 7,
-		url: 'http://localhost:3000/images/dogs.jpg',
-		alt: 'Cute kitten',
-		searchTerms: ['cute', 'kitten', 'animals', 'pets'],
-	},
-];
+const Database = require('../helpers/database');
+const DB = new Database('images');
 
 class ImagesModel {
 	async getAll(params) {
-		console.log(calculateLevenshteinDistance('katte', 'kitten'));
+		const images = await DB.getAll();
+		console.log(images);
 		const { search } = params;
 
 		const results = images.sort((a, b) => {
@@ -106,9 +45,30 @@ class ImagesModel {
 					alt: result.alt,
 				};
 			})
-			.slice(0, 2);
+			.slice(0, 1000);
 
 		return body;
+	}
+
+	async add(data, file) {
+		return new Promise(async (resolve, reject) => {
+			const { alt, searchTerms } = data;
+			const searchTermsArray = searchTerms
+				.split(',')
+				.map((term) => term.trim());
+			const id = crypto.randomUUID();
+
+			const body = {
+				alt,
+				searchTerms: searchTermsArray,
+				url: `http://localhost:3000/images/${file.filename}`,
+				id,
+			};
+
+			const res = await DB.add(body);
+
+			resolve(res);
+		});
 	}
 }
 

@@ -1,0 +1,47 @@
+[
+	{
+		"id": 1,
+		"url": "http://localhost:3000/images/close-up-portrait-yorkshire-dogs.jpg",
+		"alt": "Close-up portrait of Yorkshire dogs",
+		"searchTerms": [
+			"close-up",
+			"portrait",
+			"Yorkshire",
+			"dogs",
+			"animals",
+			"pets",
+			"cute",
+			"adorable"
+		]
+	},
+	{
+		"alt": "Hola mundo",
+		"searchTerms": ["hola", "lola"],
+		"url": "http://localhost:3000/images/9436248b-7992-4fe4-a9bd-da64ae93b200-1718915520528.jpg",
+		"id": "9436248b-7992-4fe4-a9bd-da64ae93b200"
+	},
+	{
+		"alt": "Hola mundo",
+		"searchTerms": ["hola", "lola"],
+		"url": "http://localhost:3000/images/e3131d1d-b4a8-4190-9e11-a7c857d3931d-1718915520528.jpg",
+		"id": "e3131d1d-b4a8-4190-9e11-a7c857d3931d"
+	},
+	{
+		"alt": "Hola mundo",
+		"searchTerms": ["hola", "lola"],
+		"url": "http://localhost:3000/images/1726491648306-9182666117.590721-1718915520528.jpg",
+		"id": "c21b034c-4bda-4776-a591-b908c303c961"
+	},
+	{
+		"alt": "Hola mundo",
+		"searchTerms": ["hola", "lola"],
+		"url": "http://localhost:3000/images/1726491666277-9265937169.547333-1718915520528.jpg",
+		"id": "f2d62a11-59f5-4efa-bece-235dae9bc47c"
+	},
+	{
+		"alt": "Hola mundo",
+		"searchTerms": ["hola", "lola"],
+		"url": "http://localhost:3000/images/1726491705982-6830489347.790905-profile-professional.jpg",
+		"id": "7ca7e1d5-1f7c-4ba0-9acb-c93c165d8de8"
+	}
+]
