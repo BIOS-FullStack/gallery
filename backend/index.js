@@ -16,7 +16,6 @@ app.get('/', (req, res) => {
 	res.send('Hello World');
 });
 
-
 app.use('/api/images', imagesRouter);
 
 app.listen(PORT, () => {
