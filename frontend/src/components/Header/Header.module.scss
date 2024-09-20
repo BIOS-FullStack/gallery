@@ -1,0 +1,19 @@
+.container {
+	position: relative;
+	h1, input {
+		z-index: 1;
+	}
+	::before {
+		content: '';
+		background: url(https://img.freepik.com/free-photo/three-dimensional-kids-adventure-explore-moon-space_23-2151639520.jpg);
+		background-size: cover;
+		background-position: center;
+		filter: brightness(0.5)  blur(5px); 
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: -1;
+	}
+}
