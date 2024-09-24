@@ -45,7 +45,7 @@ class ImagesModel {
 					alt: result.alt,
 				};
 			})
-			.slice(0, 1000);
+			.slice(0, 2);
 
 		return body;
 	}
