@@ -19,7 +19,6 @@ export default function AddImageModal() {
 	};
 
 	const onInputImageChange = (event) => {
-		console.log(event.target.files);
 		const url = URL.createObjectURL(event.target.files[0]);
 
 		setImageURL(url);

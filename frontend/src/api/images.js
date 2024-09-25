@@ -24,6 +24,7 @@ export const setImage = async ({ data }) => {
 			const response = await axios.post(BASE_URL, {
 				...data,
 				file: reader.result,
+				filename: data?.file?.name,
 			});
 
 			resolve(response.data);

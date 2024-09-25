@@ -13,11 +13,7 @@ class ImagesController {
 	async add(req, res) {
 		const data = req.body;
 
-		if (!req.file) {
-			return res.status(400).send('No files were uploaded.');
-		}
-
-		const response = await imagesModel.add(data, req.file);
+		const response = await imagesModel.add(data);
 		res.status(201).send(response);
 	}
 }
