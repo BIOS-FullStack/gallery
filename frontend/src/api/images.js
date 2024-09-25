@@ -13,3 +13,20 @@ export const getImages = async ({ query } = {}) => {
 
 	return response.data;
 };
+
+export const setImage = async ({ data }) => {
+	return new Promise((resolve) => {
+		const reader = new FileReader();
+
+		reader.readAsDataURL(data.file);
+
+		reader.onload = async () => {
+			const response = await axios.post(BASE_URL, {
+				...data,
+				file: reader.result,
+			});
+
+			resolve(response.data);
+		};
+	});
+};
