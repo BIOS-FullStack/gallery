@@ -5,7 +5,6 @@ const DB = new Database('images');
 class ImagesModel {
 	async getAll(params) {
 		const images = await DB.getAll();
-		console.log(images);
 		const { search } = params;
 
 		const results = images.sort((a, b) => {
@@ -25,17 +24,11 @@ class ImagesModel {
 				);
 			});
 
-			console.log(termsA, termsB);
-
 			const distanceA = calculateLevenshteinDistance(search, termsA[0]);
 			const distanceB = calculateLevenshteinDistance(search, termsB[0]);
 
-			console.log(distanceA, distanceB);
-
 			return distanceA - distanceB;
 		});
-
-		console.log(results);
 
 		const body = results
 			.map((result) => {
@@ -50,9 +43,9 @@ class ImagesModel {
 		return body;
 	}
 
-	async add(data, file) {
+	async add(data) {
 		return new Promise(async (resolve, reject) => {
-			const { alt, searchTerms } = data;
+			const { alt, searchTerms, file } = data;
 			const searchTermsArray = searchTerms
 				.split(',')
 				.map((term) => term.trim());

@@ -21,7 +21,6 @@ export default function ImagesList() {
 	});
 
 	useEffect(() => {
-		console.log(value);
 		refetch();
 	}, [value, refetch]);
 
