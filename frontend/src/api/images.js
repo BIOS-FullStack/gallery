@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { API_URL } from '../constants/config';
+import { db } from './firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const BASE_URL = `${API_URL}/images`;
 
@@ -14,20 +16,19 @@ export const getImages = async ({ query } = {}) => {
 	return response.data;
 };
 
-export const setImage = async ({ data }) => {
+export const setImage = async ({ data, id = '0I4EIz7jYBRKzTdAY4cD' }) => {
 	return new Promise((resolve) => {
 		const reader = new FileReader();
 
 		reader.readAsDataURL(data.file);
 
 		reader.onload = async () => {
-			const response = await axios.post(BASE_URL, {
-				...data,
-				file: reader.result,
-				filename: data?.file?.name,
-			});
+			const docId = id || Date.now().toString();
+			const collectionRef = doc(db, 'images', docId);
+			const docRef = await getDoc(collectionRef);
 
-			resolve(response.data);
+			console.log('Document written with ID: ', docRef.data());
+			resolve(docRef);
 		};
 	});
 };

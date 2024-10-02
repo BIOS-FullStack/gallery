@@ -42,6 +42,7 @@ export default function AddImageModal() {
 		setImage({ data: formValue })
 			.then((res) => {
 				console.log(res);
+				modalRef?.current?.close();
 			})
 			.catch((err) => {
 				console.error(err);
