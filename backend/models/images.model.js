@@ -44,8 +44,8 @@ class ImagesModel {
 	}
 
 	async add(data) {
-		return new Promise(async (resolve, reject) => {
-			const { alt, searchTerms, file } = data;
+		return new Promise(async (resolve) => {
+			const { alt, searchTerms, filename } = data;
 			const searchTermsArray = searchTerms
 				.split(',')
 				.map((term) => term.trim());
@@ -54,8 +54,9 @@ class ImagesModel {
 			const body = {
 				alt,
 				searchTerms: searchTermsArray,
-				url: `http://localhost:3000/images/${file.filename}`,
+				url: `http://localhost:3000/images/${filename}`,
 				id,
+				tags,
 			};
 
 			const res = await DB.add(body);
