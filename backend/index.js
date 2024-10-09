@@ -1,13 +1,9 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const { createServer } = require('node:http');
 const { Server } = require('socket.io');
-const calculateLevenshteinDistance = require('./helpers/strings');
-const Database = require('./helpers/database');
-const DB = new Database('images');
-
-require('dotenv').config();
-
 const imagesRouter = require('./router/images.router');
 
 const app = express();
@@ -25,16 +21,11 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
 	socket.on('inputChange', async (search) => {
-		const images = await DB.getAll();
+		const images = [{ searchTerms: ['dog', 'cat'] }];
 
 		const terms = images.map((image) => image.searchTerms).flat();
 		const uniqueTerms = [...new Set(terms)];
-		const termsOrdered = uniqueTerms.sort((termA, termB) => {
-			return (
-				calculateLevenshteinDistance(search, termA) -
-				calculateLevenshteinDistance(search, termB)
-			);
-		});
+		const termsOrdered = uniqueTerms.sort();
 
 		const words = termsOrdered.slice(0, 5);
 
@@ -43,6 +34,8 @@ io.on('connection', (socket) => {
 });
 
 app.use(express.json({ limit: '50mb' }));
+
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 

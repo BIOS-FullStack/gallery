@@ -1,6 +1,8 @@
 const calculateLevenshteinDistance = require('../helpers/strings');
 const Database = require('../helpers/database');
 const DB = new Database('images');
+const Storage = require('../helpers/storage');
+const storage = new Storage();
 
 class ImagesModel {
 	async getAll(params) {
@@ -45,18 +47,28 @@ class ImagesModel {
 
 	async add(data) {
 		return new Promise(async (resolve) => {
-			const { alt, searchTerms, filename } = data;
+			const {
+				alt = '',
+				searchTerms = '',
+				filename = '',
+				file = '',
+			} = data;
 			const searchTermsArray = searchTerms
-				.split(',')
+				?.split(',')
 				.map((term) => term.trim());
 			const id = crypto.randomUUID();
+
+			const image = await storage.uploadBase64(
+				file,
+				`images/${filename}`,
+			);
+			console.log(image);
 
 			const body = {
 				alt,
 				searchTerms: searchTermsArray,
 				url: `http://localhost:3000/images/${filename}`,
 				id,
-				tags,
 			};
 
 			const res = await DB.add(body);
