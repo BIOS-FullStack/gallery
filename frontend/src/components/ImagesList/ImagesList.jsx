@@ -29,7 +29,7 @@ export default function ImagesList() {
 			{images?.map((image) => (
 				<ImageItem key={image?.id} data={image} />
 			))}
-			{isLoading && <p>Cargagando...</p>}
+			{isLoading && <p>Cargando...</p>}
 		</div>
 	);
 }

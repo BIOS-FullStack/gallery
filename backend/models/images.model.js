@@ -1,8 +1,11 @@
 const calculateLevenshteinDistance = require('../helpers/strings');
 const Database = require('../helpers/database');
-const DB = new Database('images');
 const Storage = require('../helpers/storage');
+const AIAssistance = require('../helpers/ai-assistance');
+
+const DB = new Database('images');
 const storage = new Storage();
+const ai = new AIAssistance();
 
 class ImagesModel {
 	async getAll(params) {
@@ -53,21 +56,18 @@ class ImagesModel {
 				filename = '',
 				file = '',
 			} = data;
+
 			const searchTermsArray = searchTerms
 				?.split(',')
 				.map((term) => term.trim());
 			const id = crypto.randomUUID();
 
-			const image = await storage.uploadBase64(
-				file,
-				`images/${filename}`,
-			);
-			console.log(image);
+			const url = await storage.upload(file, `images/${id}-${filename}`);
 
 			const body = {
 				alt,
 				searchTerms: searchTermsArray,
-				url: `http://localhost:3000/images/${filename}`,
+				url,
 				id,
 			};
 
@@ -75,6 +75,12 @@ class ImagesModel {
 
 			resolve(res);
 		});
+	}
+
+	async generate(alt) {
+		const response = await ai.getImageGeneration(alt);
+
+		return response;
 	}
 }
 

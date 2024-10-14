@@ -2,6 +2,7 @@ import axios from 'axios';
 import { API_URL } from '../constants/config';
 
 const BASE_URL = `${API_URL}/images`;
+const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
 export const getImages = async ({ query } = {}) => {
 	const url = new URL(BASE_URL);
@@ -14,30 +15,34 @@ export const getImages = async ({ query } = {}) => {
 	return response.data;
 };
 
-export const setImage = async ({ data }) => {
-	return new Promise((resolve) => {
-		const reader = new FileReader();
+export const saveImage = async ({ data }) => {
+	console.log(data);
+	const formData = new FormData();
+	const imageResponse = await fetch(`${CORS_PROXY}${data?.image.url}`);
+	const imageFile = await imageResponse.blob();
 
-		reader.readAsDataURL(data.file);
+	formData.append('file', imageFile);
+	formData.append('alt', data?.alt);
+	formData.append('searchTerms', data?.searchTerms);
+	formData.append(
+		'filename',
+		`${Date.now()}-${Math.random().toString(36).substring(7)}.png`,
+	);
 
-		reader.onload = async () => {
-			const formData = new FormData();
-
-			formData.append('fileName', data.file.name);
-
-			// const obj = { type: 'image/jpeg', base64: '...' } => Object.keys(obj) => ['type', 'base64']
-
-			Object.keys(data).forEach((key) => {
-				formData.append(key, data[key]);
-			});
-
-			const response = await axios.post(BASE_URL, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
-			});
-
-			resolve(response.data);
-		};
+	const response = await axios.post(BASE_URL, formData, {
+		headers: {
+			'Content-Type': 'multipart/form-data',
+		},
 	});
+
+	return response.data;
+};
+
+export const generateImage = async ({ alt }) => {
+	const url = new URL(`${BASE_URL}/generate`);
+	url.searchParams.append('alt', alt);
+
+	const response = await axios.get(url.toString());
+
+	return response.data;
 };

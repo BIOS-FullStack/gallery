@@ -8,6 +8,7 @@ const ImagesController = require('../controllers/images.controller.js');
 const imagesController = new ImagesController();
 
 router.get('/', imagesController.getAll);
+router.get('/generate', imagesController.generate);
 router.post('/', imagesController.add);
 
 module.exports = router;

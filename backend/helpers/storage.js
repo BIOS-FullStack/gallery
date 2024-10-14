@@ -1,18 +1,24 @@
+const { getDownloadURL } = require('firebase-admin/storage');
 const admin = require('./firebase');
 
 const storage = admin.storage();
 const bucket = storage.bucket();
 
 class Storage {
-	async uploadBase64(base64, path) {
-		const res = await bucket.file(path).save(base64, {
-			public: true,
+	async upload(file, path) {
+		console.log('Vamos a subir un archivo...');
+
+		const fileRef = bucket.file(path);
+
+		await fileRef.save(file, {
 			metadata: {
-				contentType: 'image/jpeg',
-				contentEncoding: 'base64',
+				contentType: 'image/png',
 			},
 		});
-		return res;
+
+		const url = await getDownloadURL(fileRef);
+
+		return url;
 	}
 }
 
