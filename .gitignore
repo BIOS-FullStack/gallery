@@ -5,6 +5,8 @@
 **/*.env.production
 **/*.env.test
 
+backend/node_modules
+backend/serviceAccountKey.json
 
 
 # Logs
