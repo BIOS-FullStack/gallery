@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react';
-import { generateSearchTerms, saveImage } from '../../api/images';
+import { generateImage, saveImage } from '../../api/images';
 
 import { queryClient } from '../../App.jsx';
 
-export default function AddImageModal() {
+export default function GenerateImageModal() {
 	const modalRef = useRef(null);
-	const [imageURL, setImageURL] = useState(null);
+	const [image, setImage] = useState(null);
 	const [formValue, setFormValue] = useState({
 		file: null,
 		alt: '',
@@ -20,16 +20,6 @@ export default function AddImageModal() {
 		modalRef?.current?.close();
 	};
 
-	const onInputImageChange = (event) => {
-		const url = URL.createObjectURL(event.target.files[0]);
-
-		setImageURL(url);
-		setFormValue((prev) => ({
-			...prev,
-			file: event.target.files[0],
-		}));
-	};
-
 	const onInputChange = (event) => {
 		const { name, value } = event.target;
 
@@ -39,17 +29,25 @@ export default function AddImageModal() {
 		}));
 	};
 
-	const onSubmit = async (event) => {
+	const onSubmit = (event) => {
 		event.preventDefault();
-		const searchTerms = await generateSearchTerms(formValue);
-		setFormValue((prev) => ({
-			...prev,
-			searchTerms,
-		}));
+		generateImage({ alt: formValue.alt })
+			.then((res) => {
+				setImage(res.image);
+				setFormValue((prev) => ({
+					...prev,
+					searchTerms: res.tags.join(', '),
+				}));
+			})
+			.catch((err) => {
+				console.error(err);
+			});
 	};
 
 	const onSaveButtonClick = () => {
-		const data = formValue;
+		const data = { ...formValue, image };
+
+		console.log(data);
 
 		saveImage({
 			data,
@@ -57,7 +55,7 @@ export default function AddImageModal() {
 			console.log(res);
 			modalRef?.current?.close();
 			queryClient.invalidateQueries({
-				queryKey: ['images'],
+				queryKey: ['images', 'allImages'],
 			});
 		});
 	};
@@ -66,13 +64,13 @@ export default function AddImageModal() {
 		<>
 			<button
 				onClick={onButtonClick}
-				className="bg-green-600 rounded-full font-bold text-xl text-white w-12 h-12 flex items-center justify-center shadow-lg hover:brightness-75"
+				className="bg-blue-600 rounded-full font-bold text-xl text-white w-12 h-12 flex items-center justify-center shadow-lg hover:brightness-75"
 			>
-				↑
+				+
 			</button>
-			<dialog ref={modalRef} className="m-auto p-4 rounded-lg">
+			<dialog ref={modalRef} className="m-auto p-4 rounded-lg w-96">
 				<header className="w-full flex justify-between mb-2">
-					<h2 className="font-bold text-lg">Add Image Modal</h2>
+					<h2 className="font-bold text-lg">Generate Image Modal</h2>
 					<button
 						onClick={onCloseButtonClick}
 						className="bg-slate-400  font-bold p-3 py-1 hover:brightness-75 rounded-full"
@@ -80,34 +78,25 @@ export default function AddImageModal() {
 						x
 					</button>
 				</header>
-				<form className="flex flex-col gap-2" onSubmit={onSubmit}>
-					<fieldset>
-						<label htmlFor="image">
-							<div className="w-96 border-slate-400 border-2 border-dashed aspect-video bg-slate-200 shadow-sm rounded-lg flex items-center justify-center relative">
-								{imageURL && (
-									<img
-										src={imageURL}
-										alt="Preview"
-										className="object-cover w-full h-full absolute brightness-50"
-									/>
-								)}
-								<p
-									className={`z-10 ${
-										imageURL ? 'text-white' : ''
-									}`}
-								>
-									Clic aquí para subir una imagen
-								</p>
+				<form
+					className="w-full flex flex-col gap-2"
+					onSubmit={onSubmit}
+				>
+					<fieldset className="w-full">
+						<div className="w-full border-slate-400 border-2 border-dashed aspect-video bg-slate-200 shadow-sm rounded-lg flex items-center justify-center relative">
+							{image && (
+								<img
+									src={image?.url}
+									alt="Preview"
+									className="object-cover w-full h-full absolute"
+								/>
+							)}
+						</div>
+						{image && (
+							<div className="w-full text-slate-400 p-1 px-2 rounded-tl-lg text-sm">
+								{image?.revised_prompt}
 							</div>
-						</label>
-						<input
-							type="file"
-							id="image"
-							className="hidden"
-							onChange={onInputImageChange}
-							accept="image/png, image/jpeg"
-							name="file"
-						/>
+						)}
 					</fieldset>
 					<fieldset>
 						<label htmlFor="alt" className="block">
@@ -126,16 +115,16 @@ export default function AddImageModal() {
 							Términos de búsqueda
 						</label>
 						<input
+							readOnly
 							value={formValue.searchTerms}
 							type="text"
 							id="searchTerms"
 							className="w-full p-2 border border-slate-400 rounded-lg"
 							name="searchTerms"
 							placeholder='Separados por comas ","'
-							onChange={onInputChange}
 						/>
 					</fieldset>
-					<footer className="flex gap-2">
+					<footer>
 						<button
 							type="submit"
 							className="bg-blue-600 text-white font-bold p-3 py-1 rounded-full hover:brightness-75"
@@ -144,13 +133,8 @@ export default function AddImageModal() {
 						</button>
 						<button
 							type="button"
-							disabled={!formValue.searchTerms || !formValue?.alt}
 							onClick={onSaveButtonClick}
-							className={`bg-green-600 text-white font-bold p-3 py-1 rounded-full ${
-								formValue.searchTerms && formValue?.alt
-									? 'hover:brightness-75'
-									: 'grayscale-[100%]'
-							}`}
+							className="bg-green-600 text-white font-bold p-3 py-1 rounded-full hover:brightness-75"
 						>
 							Guardar
 						</button>
