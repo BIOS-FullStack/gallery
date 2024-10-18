@@ -35,15 +35,13 @@ class ImagesModel {
 			return distanceA - distanceB;
 		});
 
-		const body = results
-			.map((result) => {
-				return {
-					id: result.id,
-					url: result.url,
-					alt: result.alt,
-				};
-			})
-			.slice(0, 2);
+		const body = results.map((result) => {
+			return {
+				id: result.id,
+				url: result.url,
+				alt: result.alt,
+			};
+		});
 
 		return body;
 	}
