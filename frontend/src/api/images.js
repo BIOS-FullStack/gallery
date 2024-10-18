@@ -1,4 +1,7 @@
 import axios from 'axios';
+
+import { AI } from './firebase';
+
 import { API_URL } from '../constants/config';
 
 const BASE_URL = `${API_URL}/images`;
@@ -16,18 +19,24 @@ export const getImages = async ({ query } = {}) => {
 };
 
 export const saveImage = async ({ data }) => {
-	console.log(data);
 	const formData = new FormData();
-	const imageResponse = await fetch(`${CORS_PROXY}${data?.image.url}`);
-	const imageFile = await imageResponse.blob();
+	let imageFile = data?.file;
+
+	if (!imageFile) {
+		const imageResponse = await fetch(`${CORS_PROXY}${data?.image.url}`);
+		imageFile = await imageResponse.blob();
+	}
+
+	console.log(data?.file);
+
+	const defaultFileName = `${Date.now()}-${Math.random()
+		.toString(36)
+		.substring(7)}.png`;
 
 	formData.append('file', imageFile);
 	formData.append('alt', data?.alt);
 	formData.append('searchTerms', data?.searchTerms);
-	formData.append(
-		'filename',
-		`${Date.now()}-${Math.random().toString(36).substring(7)}.png`,
-	);
+	formData.append('filename', data?.file?.name || defaultFileName);
 
 	const response = await axios.post(BASE_URL, formData, {
 		headers: {
@@ -46,3 +55,37 @@ export const generateImage = async ({ alt }) => {
 
 	return response.data;
 };
+
+export const generateSearchTerms = async ({ file }) => {
+	const prompt = `Genera etiquetas para esta imagen, 
+	que sirvan como términos de búsqueda, y devuelvelas
+	en un formato único igual a este:
+
+	cielo, estrellas, nubes, cielo abierto, paisaje
+	
+	`;
+
+	const imagePart = await fileToGenerativePart(file);
+
+	const result = await AI.generateContent([prompt, imagePart]);
+
+	const response = result.response;
+	const text = response.text();
+
+	return text;
+};
+
+async function fileToGenerativePart(file) {
+	const base64EncodedDataPromise = new Promise((resolve) => {
+		const reader = new FileReader();
+		reader.onloadend = () => resolve(reader.result.split(',')[1]);
+		reader.readAsDataURL(file);
+	});
+
+	return {
+		inlineData: {
+			data: await base64EncodedDataPromise,
+			mimeType: file.type,
+		},
+	};
+}
