@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getImages } from '../../api/images';
 
-import { useSearchValue } from '../../contexts/SearchValueContext';
+import { useSearchValue } from '../../providers/SearchValueContextProvider';
 
 import ImageItem from '../ImageItem';
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Input } from 'antd';
 
-import { useSearchValue } from '../../contexts/SearchValueContext';
+import { useSearchValue } from '../../providers/SearchValueContextProvider';
 import { useEffect } from 'react';
 
 const { Search } = Input;

@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
+
 import { generateSearchTerms, saveImage } from '../../api/images';
 
-import { queryClient } from '../../App.jsx';
+import { queryClient } from '../../providers/MyQueryClienteProvider';
 
 export default function AddImageModal() {
 	const modalRef = useRef(null);
