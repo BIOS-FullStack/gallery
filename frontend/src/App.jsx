@@ -20,9 +20,11 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/signin',
-		caseSensitive: false,
-		index: true,
 		lazy: lazyComponent('SignIn'),
+	},
+	{
+		path: '/signup',
+		lazy: lazyComponent('SignUp'),
 	},
 ]);
 

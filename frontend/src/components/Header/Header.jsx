@@ -1,10 +1,13 @@
+import { useNavigate } from 'react-router-dom';
 import Searchbar from '../Searchbar';
 
 import styles from './Header.module.scss';
 
 export default function Header() {
+	const navigate = useNavigate();
+
 	const onSignInButtonClick = async () => {
-		console.log('Iniciar');
+		navigate('/signin');
 	};
 
 	return (
