@@ -7,15 +7,21 @@ const context = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		const auth = getAuth();
 		onAuthStateChanged(auth, (user) => {
 			setUser(user);
+			setIsLoading(false);
 		});
 	}, []);
 
-	return <context.Provider value={{ user }}>{children}</context.Provider>;
+	return (
+		<context.Provider value={{ user, userLoading: isLoading }}>
+			{children}
+		</context.Provider>
+	);
 };
 
 AuthProvider.propTypes = {
@@ -23,7 +29,7 @@ AuthProvider.propTypes = {
 };
 
 export const useAuth = () => {
-	const { user } = useContext(context);
+	const value = useContext(context);
 
-	return { user };
+	return value;
 };

@@ -9,8 +9,6 @@ export default function Header() {
 	const navigate = useNavigate();
 	const { user } = useAuth();
 
-	console.log(user);
-
 	const onSignOutButtonClick = async () => {
 		await signOutUser();
 		navigate('/auth/signin');
