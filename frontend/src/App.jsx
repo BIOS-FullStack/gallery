@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { SearchValueContextProvider } from './providers/SearchValueContextProvider';
 import { MyQueryClienteProvider } from './providers/MyQueryClienteProvider';
+import { AuthProvider } from './providers/AuthProvider';
 
 import { Home } from './pages';
 
@@ -44,7 +45,9 @@ function App() {
 	return (
 		<MyQueryClienteProvider>
 			<SearchValueContextProvider>
-				<RouterProvider router={router} />
+				<AuthProvider>
+					<RouterProvider router={router} />
+				</AuthProvider>
 			</SearchValueContextProvider>
 		</MyQueryClienteProvider>
 	);

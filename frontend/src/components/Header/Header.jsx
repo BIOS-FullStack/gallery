@@ -3,9 +3,13 @@ import Searchbar from '../Searchbar';
 
 import styles from './Header.module.scss';
 import { signOutUser } from '../../api/auth';
+import { useAuth } from '../../providers/AuthProvider';
 
 export default function Header() {
 	const navigate = useNavigate();
+	const { user } = useAuth();
+
+	console.log(user);
 
 	const onSignOutButtonClick = async () => {
 		await signOutUser();
@@ -20,7 +24,7 @@ export default function Header() {
 			<nav className="w-full flex justify-end bg-white p-4 fixed top-0">
 				<div className="flex gap-4">
 					<button onClick={onSignOutButtonClick}>
-						Cerrar sesión
+						{user ? 'Cerrar sesión' : 'Iniciar sesión'}
 					</button>
 				</div>
 			</nav>
