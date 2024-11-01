@@ -32,6 +32,10 @@ const router = createBrowserRouter([
 				path: 'signup',
 				lazy: lazyComponent('SignUp'),
 			},
+			{
+				path: 'recovery',
+				lazy: lazyComponent('RecoveryPassword'),
+			},
 		],
 	},
 ]);

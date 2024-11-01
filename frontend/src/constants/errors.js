@@ -7,6 +7,7 @@ export const getFirebaseAuthError = (code) => {
 		'auth/too-many-requests':
 			'Demasiados intentos fallidos, inténtelo de nuevo más tarde',
 		'auth/user-disabled': 'El usuario está deshabilitado',
+		'auth/missing-email': 'Falta el correo electrónico',
 	};
 
 	if (errors[code]) {
