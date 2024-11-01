@@ -11,6 +11,7 @@
 		"deploy": "npm run build && firebase deploy --only hosting"
 	},
 	"dependencies": {
+		"@hookform/resolvers": "^3.9.0",
 		"@tanstack/react-query": "^5.56.2",
 		"antd": "^5.20.6",
 		"axios": "^1.7.7",
@@ -18,6 +19,7 @@
 		"prop-types": "^15.8.1",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
+		"react-hook-form": "^7.53.1",
 		"react-router-dom": "^6.27.0",
 		"socket.io-client": "^4.8.0",
 		"yup": "^1.4.0"

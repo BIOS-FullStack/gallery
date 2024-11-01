@@ -2,12 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import Searchbar from '../Searchbar';
 
 import styles from './Header.module.scss';
+import { signOutUser } from '../../api/auth';
 
 export default function Header() {
 	const navigate = useNavigate();
 
-	const onSignInButtonClick = async () => {
-		navigate('/signin');
+	const onSignOutButtonClick = async () => {
+		await signOutUser();
+		navigate('/auth/signin');
 	};
 
 	return (
@@ -17,8 +19,8 @@ export default function Header() {
 			<div className={styles.background} />
 			<nav className="w-full flex justify-end bg-white p-4 fixed top-0">
 				<div className="flex gap-4">
-					<button onClick={onSignInButtonClick}>
-						Iniciar Sesión
+					<button onClick={onSignOutButtonClick}>
+						Cerrar sesión
 					</button>
 				</div>
 			</nav>

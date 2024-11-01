@@ -5,6 +5,8 @@ import { MyQueryClienteProvider } from './providers/MyQueryClienteProvider';
 
 import { Home } from './pages';
 
+import AuthLayout from './components/AuthLayout';
+
 const lazyComponent = (component) => {
 	return async () => {
 		const { [component]: Component } = await import('./pages');
@@ -19,12 +21,18 @@ const router = createBrowserRouter([
 		element: <Home />,
 	},
 	{
-		path: '/signin',
-		lazy: lazyComponent('SignIn'),
-	},
-	{
-		path: '/signup',
-		lazy: lazyComponent('SignUp'),
+		path: '/auth',
+		Component: AuthLayout,
+		children: [
+			{
+				path: 'signin',
+				lazy: lazyComponent('SignIn'),
+			},
+			{
+				path: 'signup',
+				lazy: lazyComponent('SignUp'),
+			},
+		],
 	},
 ]);
 
