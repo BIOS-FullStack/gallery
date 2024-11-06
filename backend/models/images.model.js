@@ -53,6 +53,7 @@ class ImagesModel {
 				searchTerms = '',
 				filename = '',
 				file = '',
+				userId,
 			} = data;
 
 			const searchTermsArray = searchTerms
@@ -67,6 +68,7 @@ class ImagesModel {
 				searchTerms: searchTermsArray,
 				url,
 				id,
+				userId,
 			};
 
 			const res = await DB.add(body);

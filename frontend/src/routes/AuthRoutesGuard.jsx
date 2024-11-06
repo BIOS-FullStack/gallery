@@ -1,21 +1,22 @@
 import { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Spin } from 'antd';
 
 import { useAuth } from '../providers/AuthProvider';
+import PropTypes from 'prop-types';
 
-export default function PrivateRoutes() {
+export default function AuthRoutesGuard({ component: Component }) {
 	const navigate = useNavigate();
 	const { user, userLoading } = useAuth();
 
 	useEffect(() => {
-		if (!user && !userLoading) {
-			navigate('/auth/signin');
+		if (user) {
+			navigate('/');
 		}
 	}, [user, userLoading, navigate]);
 
-	if (!user) {
+	if (userLoading || user) {
 		return (
 			<div className="w-full h-screen flex flex-col items-center justify-center">
 				<Spin size="large" />
@@ -23,5 +24,9 @@ export default function PrivateRoutes() {
 		);
 	}
 
-	return <Outlet />;
+	return <Component />;
 }
+
+AuthRoutesGuard.propTypes = {
+	component: PropTypes.node.isRequired,
+};

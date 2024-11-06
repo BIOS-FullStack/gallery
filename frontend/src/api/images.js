@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getAuth } from 'firebase/auth';
 
 import { AI } from './firebase';
 
@@ -19,8 +20,11 @@ export const getImages = async ({ query } = {}) => {
 };
 
 export const saveImage = async ({ data }) => {
+	const auth = getAuth();
 	const formData = new FormData();
 	let imageFile = data?.file;
+
+	const userId = auth.currentUser?.uid;
 
 	if (!imageFile) {
 		const imageResponse = await fetch(`${CORS_PROXY}${data?.image.url}`);
@@ -37,6 +41,9 @@ export const saveImage = async ({ data }) => {
 	formData.append('alt', data?.alt);
 	formData.append('searchTerms', data?.searchTerms);
 	formData.append('filename', data?.file?.name || defaultFileName);
+	formData.append('userId', userId);
+
+	console.log(userId);
 
 	const response = await axios.post(BASE_URL, formData, {
 		headers: {

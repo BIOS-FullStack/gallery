@@ -1,8 +1,9 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { Home } from '../pages';
+import { Home, Images } from '../pages';
 import AuthLayout from '../components/AuthLayout';
 import PrivateRoutes from './PrivateRoutes';
+import AuthRoutesGuard from './AuthRoutesGuard';
 
 const lazyComponent = (component) => {
 	return async () => {
@@ -15,17 +16,21 @@ const lazyComponent = (component) => {
 const router = createBrowserRouter([
 	{
 		path: '/',
+		element: <Home />,
+	},
+	{
+		path: '/',
 		element: <PrivateRoutes />,
 		children: [
 			{
-				path: '/',
-				element: <Home />,
+				path: '/images',
+				element: <Images />,
 			},
 		],
 	},
 	{
 		path: '/auth',
-		Component: AuthLayout,
+		element: <AuthRoutesGuard component={AuthLayout} />,
 		children: [
 			{
 				path: 'signin',

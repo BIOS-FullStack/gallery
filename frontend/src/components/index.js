@@ -1,7 +1,17 @@
 import AddImageModal from './AddImageModal';
+import AuthLayout from './AuthLayout';
 import GenerateImageModal from './GenerateImageModal';
-import Header from './Header';
+import HomeSearch from './HomeSearch';
 import ImagesList from './ImagesList';
+import Layout from './Layout';
 import Searchbar from './Searchbar';
 
-export { AddImageModal, GenerateImageModal, Header, ImagesList, Searchbar };
+export {
+	AddImageModal,
+	AuthLayout,
+	GenerateImageModal,
+	HomeSearch,
+	ImagesList,
+	Layout,
+	Searchbar,
+};
