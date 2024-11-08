@@ -8,10 +8,13 @@ import { API_URL } from '../constants/config';
 const BASE_URL = `${API_URL}/images`;
 const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
-export const getImages = async ({ query } = {}) => {
+export const getImages = async ({ query, userId } = {}) => {
 	const url = new URL(BASE_URL);
 	if (query) {
 		url.searchParams.append('search', query);
+	}
+	if (userId) {
+		url.searchParams.append('userId', userId);
 	}
 
 	const response = await axios.get(url.toString());

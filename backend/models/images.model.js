@@ -7,43 +7,40 @@ const DB = new Database('images');
 const storage = new Storage();
 const ai = new AIAssistance();
 
+const admin = require('../helpers/firebase');
+
+const auth = admin.auth();
+
 class ImagesModel {
-	async getAll(params) {
-		const images = await DB.getAll();
-		const { search } = params;
+	async getAll(data) {
+		const { search, userId } = data;
+		const params = [];
 
-		const results = images.sort((a, b) => {
-			const termsA = a.searchTerms;
-			const termsB = b.searchTerms;
+		if (userId) {
+			params.push(['userId', '==', userId]);
+		}
 
-			termsA.sort((termA, termB) => {
-				return (
-					calculateLevenshteinDistance(search, termA) -
-					calculateLevenshteinDistance(search, termB)
-				);
-			});
-			termsB.sort((termA, termB) => {
-				return (
-					calculateLevenshteinDistance(search, termA) -
-					calculateLevenshteinDistance(search, termB)
-				);
-			});
+		if (search) {
+			params.push(['searchTerms', 'array-contains', search]);
+		}
 
-			const distanceA = calculateLevenshteinDistance(search, termsA[0]);
-			const distanceB = calculateLevenshteinDistance(search, termsB[0]);
+		const images = await DB.getAll({ params });
 
-			return distanceA - distanceB;
-		});
+		const body = images.map(async (result) => {
+			const user = result.userId
+				? await auth.getUser(result.userId)
+				: null;
+			const userName = user?.displayName;
 
-		const body = results.map((result) => {
 			return {
 				id: result.id,
 				url: result.url,
 				alt: result.alt,
+				userName,
 			};
 		});
 
-		return body;
+		return Promise.all(body);
 	}
 
 	async add(data) {

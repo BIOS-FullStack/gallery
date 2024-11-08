@@ -7,13 +7,17 @@ class Database {
 		this.collection = collection;
 	}
 
-	async getAll() {
-		const data = (await db.collection(this.collection).get()).docs.map(
-			(doc) => ({
-				id: doc.id,
-				...doc.data(),
-			}),
-		);
+	async getAll({ params = [] } = {}) {
+		let query = db.collection(this.collection);
+
+		for (const param of params) {
+			query = query.where(...param);
+		}
+
+		const data = (await query.get()).docs.map((doc) => ({
+			id: doc.id,
+			...doc.data(),
+		}));
 
 		return data;
 	}

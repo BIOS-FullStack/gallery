@@ -6,8 +6,9 @@ import { getImages } from '../../api/images';
 import { useSearchValue } from '../../providers/SearchValueContextProvider';
 
 import ImageItem from '../ImageItem';
+import PropTypes from 'prop-types';
 
-export default function ImagesList() {
+export default function ImagesList({ userId }) {
 	const { value } = useSearchValue();
 
 	const {
@@ -15,8 +16,8 @@ export default function ImagesList() {
 		isLoading,
 		refetch,
 	} = useQuery({
-		queryKey: ['images'],
-		queryFn: () => getImages({ query: value }),
+		queryKey: ['images', userId],
+		queryFn: () => getImages({ query: value, userId }),
 		refetchOnWindowFocus: false,
 	});
 
@@ -33,3 +34,7 @@ export default function ImagesList() {
 		</div>
 	);
 }
+
+ImagesList.propTypes = {
+	userId: PropTypes.string,
+};

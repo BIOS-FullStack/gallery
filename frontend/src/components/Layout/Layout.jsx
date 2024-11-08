@@ -7,6 +7,7 @@ import { signOutUser } from '../../api/auth';
 
 import { useAuth } from '../../providers/AuthProvider';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 export default function Layout({ children }) {
 	const navigate = useNavigate();
@@ -31,9 +32,16 @@ export default function Layout({ children }) {
 					{!!user && (
 						<Popover
 							content={
-								<button onClick={onSignOutButtonClick}>
-									Cerrar sesión
-								</button>
+								<div className="flex flex-col gap-2">
+									<Link to="/">Inicio</Link>
+									<Link to="/images">Ver mis imágenes</Link>
+									<button
+										className="w-full text-left"
+										onClick={onSignOutButtonClick}
+									>
+										Cerrar sesión
+									</button>
+								</div>
 							}
 							title={userName}
 							trigger="click"
