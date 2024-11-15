@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 
 import styles from './ImageItem.module.scss';
-
 export default function ImageItem({ data = {} }) {
-	const { url, alt, userName } = data || {};
+	const { url, alt, userName = 'Desconocido' } = data || {};
 
 	return (
 		<figure className={styles.container}>
@@ -17,5 +16,6 @@ ImageItem.propTypes = {
 	data: PropTypes.objectOf({
 		url: PropTypes.string.isRequired,
 		alt: PropTypes.string,
+		userId: PropTypes.string,
 	}).isRequired,
 };

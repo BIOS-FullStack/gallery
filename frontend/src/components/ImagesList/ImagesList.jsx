@@ -26,7 +26,7 @@ export default function ImagesList({ userId }) {
 	}, [value, refetch]);
 
 	return (
-		<div className="flex p-4 gap-4">
+		<div className="flex flex-wrap p-4 gap-4">
 			{images?.map((image) => (
 				<ImageItem key={image?.id} data={image} />
 			))}

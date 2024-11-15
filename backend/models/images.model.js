@@ -8,8 +8,7 @@ const storage = new Storage();
 const ai = new AIAssistance();
 
 const admin = require('../helpers/firebase');
-
-const auth = admin.auth();
+const db = admin.firestore();
 
 class ImagesModel {
 	async getAll(data) {
@@ -25,18 +24,30 @@ class ImagesModel {
 		}
 
 		const images = await DB.getAll({ params });
+		const usersId = new Set(
+			images.map((image) => image.userId).filter(Boolean),
+		);
+		const usersPromises = [...usersId].map((userId) =>
+			db.collection('users').doc(userId).get(),
+		);
+		const users = await Promise.all(usersPromises);
+
+		const usersDictionary = new Map();
+
+		users.forEach((user) => {
+			usersDictionary.set(user.id, user.data());
+		});
 
 		const body = images.map(async (result) => {
-			const user = result.userId
-				? await auth.getUser(result.userId)
-				: null;
-			const userName = user?.displayName;
+			const user = usersDictionary.get(result.userId);
 
 			return {
 				id: result.id,
 				url: result.url,
 				alt: result.alt,
-				userName,
+				userId: result.userId || null,
+				userName: user?.name || null,
+				userRole: user?.role || null,
 			};
 		});
 
