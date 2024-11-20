@@ -46,7 +46,7 @@ class ImagesModel {
 				url: result.url,
 				alt: result.alt,
 				userId: result.userId || null,
-				userName: user?.name || null,
+				userName: user?.name,
 				userRole: user?.role || null,
 			};
 		});
