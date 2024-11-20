@@ -16,6 +16,6 @@ ImageItem.propTypes = {
 	data: PropTypes.objectOf({
 		url: PropTypes.string.isRequired,
 		alt: PropTypes.string,
-		userId: PropTypes.string,
+		userName: PropTypes.string,
 	}).isRequired,
 };
