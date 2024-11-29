@@ -14,7 +14,9 @@ export default function GenerateImageModal() {
 	});
 
 	const onButtonClick = () => {
-		modalRef?.current?.showModal();
+		if (modalRef?.current?.showModal) {
+			modalRef?.current?.showModal();
+		}
 	};
 
 	const onCloseButtonClick = () => {
@@ -48,8 +50,6 @@ export default function GenerateImageModal() {
 	const onSaveButtonClick = () => {
 		const data = { ...formValue, image };
 
-		console.log(data);
-
 		saveImage({
 			data,
 		}).then((res) => {
@@ -64,6 +64,7 @@ export default function GenerateImageModal() {
 	return (
 		<>
 			<button
+				aria-label="Generar imagen"
 				onClick={onButtonClick}
 				className="bg-blue-600 rounded-full font-bold text-xl text-white w-12 h-12 flex items-center justify-center shadow-lg hover:brightness-75"
 			>
@@ -80,6 +81,7 @@ export default function GenerateImageModal() {
 					</button>
 				</header>
 				<form
+					data-testid="form-generate-image"
 					className="w-full flex flex-col gap-2"
 					onSubmit={onSubmit}
 				>
@@ -109,6 +111,7 @@ export default function GenerateImageModal() {
 							className="w-full p-2 border border-slate-400 rounded-lg"
 							name="alt"
 							onChange={onInputChange}
+							placeholder="Escribe el texto alternativo"
 						></textarea>
 					</fieldset>
 					<fieldset>
