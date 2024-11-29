@@ -1,0 +1,39 @@
+name: Correr tests y construir proyecto
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    test-and-build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '20'
+
+            - name: Install PNPM
+              run: |
+                  cd frontend
+                  npm install -g pnpm
+
+            - name: Install dependencies
+              run: |
+                  cd frontend
+                  pnpm install
+
+            - name: Run tests
+              run: |
+                  cd frontend
+                  npm test
+
+            - name: Build project
+              run: |
+                  cd frontend
+                  npm run build
